@@ -12,7 +12,8 @@ def main():
   X_train, X_test, y_train, y_test = train_test_split(irisData.data, irisData.target, test_size=0.2, random_state=0)
 
   naiveBayes = NaiveBayes.NaiveBayes(trainData=X_train, trainTarget=y_train, testData=X_test, testTarget=y_test)
-  naiveBayes.testZip(X_test)
+  predict = naiveBayes.fit().predict()
+  print(predict)
 
 if __name__ == "__main__":
     main()
