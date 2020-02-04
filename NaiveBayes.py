@@ -3,14 +3,14 @@ import pprint
 from collections import Counter
 
 class NaiveBayes:
-  def __init__(self, trainData=None, trainTarget=None, testData=None, testTarget=None):
+  def __init__(self):
     self.splitedClasses = dict()
     self.trainedFeature = dict()
 
-    self.trainData = trainData
-    self.trainTarget = trainTarget
-    self.testData = testData
-    self.testTarget = testTarget
+    self.trainData = None
+    self.trainTarget = None
+    self.testData = None
+    self.testTarget = None
 
 
   def printSplitedClasses(self):
@@ -71,12 +71,15 @@ class NaiveBayes:
     return (1 / (math.sqrt(2 * math.pi) * standardDeviation)) * exponent
 
 
-  def fit(self, print=False):
+  def fit(self, trainData=None, trainTarget=None, testData=None, testTarget=None, print=False):
+    self.setTrainData(trainData, trainTarget)
+    self.setTestData(testData, testTarget)
+    self.trainedFeature.clear()
     splitedCLasses = self.__classSpliter()
 
     for key, value in splitedCLasses.items():
       self.trainedFeature[key] = self.__squashFeature(value)    
-    
+
     if (print == True):
       pprint.pprint(self.trainedFeature)
     return self
@@ -87,6 +90,7 @@ class NaiveBayes:
 
     for key, value in self.trainedFeature.items():
       probabilities[key] = value[0][0] / len(self.trainData)
+
       for index in range(len(value)):
         _nbInstance, mean, standardDeviation = value[index]
         probabilities[key] *= self.__gaussianPDF(testInstance[index], mean, standardDeviation)
@@ -106,6 +110,9 @@ class NaiveBayes:
 
   def predict(self):
     predictions = list()
+
+    if len(self.trainedFeature) is 0:
+      return False
 
     for testInstance in self.testData:
       predictions.append(self.__getPredictionForInstance(testInstance))
