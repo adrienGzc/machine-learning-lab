@@ -10,22 +10,17 @@ class NaiveBayes:
     self.trainData = None
     self.trainTarget = None
     self.testData = None
-    self.testTarget = None
-
 
   def printSplitedClasses(self):
     pprint.pprint(self.splitedClasses)
-
 
   def testZip(self, data):
     for column in zip(*data):
       print(column)
     return self
 
-
   def __mean(self, feature):
-    return (sum(feature) / len(feature))
-
+    return sum(feature) / len(feature)
 
   def __variance(self, feature):
     meanDifference = list()
@@ -35,10 +30,8 @@ class NaiveBayes:
       meanDifference.append(pow((instance - mean), 2))
     return self.__mean(meanDifference)
 
-
   def __standardDeviation(self, feature):
     return round(math.sqrt(self.__variance(feature)), 2)
-
 
   def __classSpliter(self):
     for index, target in enumerate(self.trainData):
@@ -47,16 +40,12 @@ class NaiveBayes:
       self.splitedClasses[self.trainTarget[index]].append(target)
     return self.splitedClasses
 
-
   def setTrainData(self, trainData, targetData):
     self.trainData = trainData
     self.trainTarget = targetData
 
-
-  def setTestData(self, testData, targetTest):
+  def setTestData(self, testData):
     self.testData = testData
-    self.targetTest = targetTest
-
 
   def __squashFeature(self, classData):
     tmp = list()
@@ -65,25 +54,9 @@ class NaiveBayes:
       tmp.append((len(feature), self.__mean(feature), self.__standardDeviation(feature)))
     return tmp
 
-
   def __gaussianPDF(self, feature, mean, standardDeviation):
     exponent = math.exp(-((feature - mean) ** 2 / (2 * standardDeviation ** 2 )))
     return (1 / (math.sqrt(2 * math.pi) * standardDeviation)) * exponent
-
-
-  def fit(self, trainData=None, trainTarget=None, testData=None, testTarget=None, print=False):
-    self.setTrainData(trainData, trainTarget)
-    self.setTestData(testData, testTarget)
-    self.trainedFeature.clear()
-    splitedCLasses = self.__classSpliter()
-
-    for key, value in splitedCLasses.items():
-      self.trainedFeature[key] = self.__squashFeature(value)    
-
-    if (print == True):
-      pprint.pprint(self.trainedFeature)
-    return self
-
 
   def __getPropabilities(self, testInstance):
     probabilities = dict()
@@ -96,9 +69,8 @@ class NaiveBayes:
         probabilities[key] *= self.__gaussianPDF(testInstance[index], mean, standardDeviation)
     return probabilities
 
-
   def __getPredictionForInstance(self, testInstance):
-    higherProb = None
+    higherProb = -1
     higherClass = None
     probaResults = self.__getPropabilities(testInstance)
 
@@ -107,6 +79,19 @@ class NaiveBayes:
         higherProb = value
         higherClass = key
     return higherClass
+
+  def fit(self, trainData=None, trainTarget=None, testData=None, displayTraining=False):
+    self.setTrainData(trainData, trainTarget)
+    self.setTestData(testData)
+    self.trainedFeature.clear()
+    splitedCLasses = self.__classSpliter()
+
+    for key, value in splitedCLasses.items():
+      self.trainedFeature[key] = self.__squashFeature(value)
+
+    if (displayTraining == True):
+      pprint.pprint(self.trainedFeature)
+    return self
 
   def predict(self):
     predictions = list()

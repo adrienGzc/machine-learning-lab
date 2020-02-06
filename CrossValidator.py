@@ -1,5 +1,6 @@
 import random
 import pprint
+import copy
 from functools import reduce
 
 class CrossValidator:
@@ -30,16 +31,33 @@ class CrossValidator:
       end = foldSize + start
       self.folds.append(copyDataset[start:end])
 
+  def __getTargetFromData(self, dataset):
+    test = [instance.pop(-1) for instance in dataset]
+    return test
+
+  def __getAccuracy(self, original, predicted):
+    nbCorrectPrediction = 0
+    for index, predictClass in enumerate(predicted):
+      if original[index] == predictClass:
+        nbCorrectPrediction += 1
+    return nbCorrectPrediction / len(original) * 100
+
   def score(self):
     if (self.__checkNotEmptyAttributes() is False):
       return False
 
     self.__splitDatasetIntoKFolds()
-    # scores = list()
+    accuracyScores = list()
     for index, fold in enumerate(self.folds):
-      trainData = self.folds.copy()
-      testData = fold
+      trainData = copy.deepcopy(self.folds)
       trainData.pop(index)
       trainData = sum(trainData, [])
+      targetTrain = self.__getTargetFromData(trainData)
+      testData = copy.deepcopy(fold)
+      targetTest = self.__getTargetFromData(testData)
 
-      pprint.pprint(trainData)
+
+      self.algorithm.fit(trainData, targetTrain, fold, False)
+      predictionFold = self.algorithm.predict()
+      accuracyScores.append(self.__getAccuracy(targetTest, predictionFold))    
+    print('Accuracy: %.2f%%' % (sum(accuracyScores) / len(accuracyScores)))
