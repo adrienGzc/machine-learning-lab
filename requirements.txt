@@ -6,3 +6,4 @@ copy
 random
 reduce
 math
+matplotlib

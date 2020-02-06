@@ -60,4 +60,4 @@ class CrossValidator:
       self.algorithm.fit(trainData, targetTrain, fold, False)
       predictionFold = self.algorithm.predict()
       accuracyScores.append(self.__getAccuracy(targetTest, predictionFold))    
-    print('Accuracy: %.2f%%' % (sum(accuracyScores) / len(accuracyScores)))
+    return accuracyScores, sum(accuracyScores) / len(accuracyScores)

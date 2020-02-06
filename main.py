@@ -16,13 +16,16 @@ def concateTargetWithDataset(dataset, targetDataset):
 
 def main():
   irisData = datasets.load_iris()
-  irisData.data = irisData.data
-  irisData.target = irisData.target
+  irisData.data = irisData.data[:-50]
+  irisData.target = irisData.target[:-50]
   newDataset = concateTargetWithDataset(irisData.data, irisData.target)
-  naiveBayes = NaiveBayes.NaiveBayes()
 
+  naiveBayes = NaiveBayes.NaiveBayes()
   crossValidator = CrossValidator.CrossValidator(algo=naiveBayes, dataset=newDataset, nbFolds=10)
-  crossValidator.score()
+  _scores, accuracy = crossValidator.score()
+  predicton = naiveBayes.getPredictions()
+  print(predicton)
+  print('Accuracy: %.2f%%' % accuracy)
 
 if __name__ == "__main__":
     main()

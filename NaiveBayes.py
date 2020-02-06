@@ -6,18 +6,19 @@ class NaiveBayes:
   def __init__(self):
     self.splitedClasses = dict()
     self.trainedFeature = dict()
+    self.predictions = list()
 
     self.trainData = None
     self.trainTarget = None
     self.testData = None
 
-  def printSplitedClasses(self):
-    pprint.pprint(self.splitedClasses)
-
   def testZip(self, data):
     for column in zip(*data):
       print(column)
     return self
+
+  def getPredictions(self):
+    return self.predictions
 
   def __mean(self, feature):
     return sum(feature) / len(feature)
@@ -94,11 +95,11 @@ class NaiveBayes:
     return self
 
   def predict(self):
-    predictions = list()
-
     if len(self.trainedFeature) is 0:
       return False
 
+    tmp = list()
     for testInstance in self.testData:
-      predictions.append(self.__getPredictionForInstance(testInstance))
-    return predictions
+      tmp.append(self.__getPredictionForInstance(testInstance))
+    self.predictions.append(tmp)
+    return tmp
