@@ -1,4 +1,5 @@
 import random
+import pprint
 from sklearn import datasets
 
 import ROC
@@ -33,8 +34,8 @@ def mainWhitoutFirstFlower():
 # Just the same but whitout a different flower (2) to stay on a binary classification.
 def mainWhitoutMiddleFlower():
   irisData = datasets.load_iris()
-  irisData.data = irisData.data[:-50]
-  irisData.target = irisData.target[:-50]
+  irisData.data = [instance for index, instance in enumerate(irisData.data) if index < 51 or index > 100]
+  irisData.target = list(filter(lambda label: label != 1, irisData.target))
   newDataset = concateTargetWithDataset(irisData.data, irisData.target)
 
   naiveBayes = NaiveBayes.NaiveBayes()
