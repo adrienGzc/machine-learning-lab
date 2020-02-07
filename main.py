@@ -1,11 +1,11 @@
 import random
-import pprint
 from sklearn import datasets
-from sklearn.model_selection import train_test_split
 
+import ROC
 import NaiveBayes
 import CrossValidator
 
+# Add the target label at the end of the dataset. Needed to shuffle the data easily.
 def concateTargetWithDataset(dataset, targetDataset):
   data = list()
   for index, instance in enumerate(dataset):
@@ -14,7 +14,8 @@ def concateTargetWithDataset(dataset, targetDataset):
     data.append(tmp)
   return data
 
-def main():
+# Just the same but whitout a different flower (3) to stay on a binary classification.
+def mainWhitoutFirstFlower():
   irisData = datasets.load_iris()
   irisData.data = irisData.data[:-50]
   irisData.target = irisData.target[:-50]
@@ -22,10 +23,46 @@ def main():
 
   naiveBayes = NaiveBayes.NaiveBayes()
   crossValidator = CrossValidator.CrossValidator(algo=naiveBayes, dataset=newDataset, nbFolds=10)
-  _scores, accuracy = crossValidator.score()
-  predicton = naiveBayes.getPredictions()
-  print(predicton)
-  print('Accuracy: %.2f%%' % accuracy)
+  _scoresByFold, meanAccuracy, rocData = crossValidator.score()
+  print('Accuracy: %.2f%%' % meanAccuracy)
+
+  roc = ROC.ROC()
+  roc.rocCurve(rocData)
+  roc.showROC()
+
+# Just the same but whitout a different flower (2) to stay on a binary classification.
+def mainWhitoutMiddleFlower():
+  irisData = datasets.load_iris()
+  irisData.data = irisData.data[:-50]
+  irisData.target = irisData.target[:-50]
+  newDataset = concateTargetWithDataset(irisData.data, irisData.target)
+
+  naiveBayes = NaiveBayes.NaiveBayes()
+  crossValidator = CrossValidator.CrossValidator(algo=naiveBayes, dataset=newDataset, nbFolds=10)
+  _scoresByFold, meanAccuracy, rocData = crossValidator.score()
+  print('Accuracy: %.2f%%' % meanAccuracy)
+
+  roc = ROC.ROC()
+  roc.rocCurve(rocData)
+  roc.showROC()
+
+# Whitout the last flower (1) to stay on a binary classification.
+def mainWhitoutLastFlower():
+  irisData = datasets.load_iris()
+  irisData.data = irisData.data[50:]
+  irisData.target = irisData.target[50:]
+  newDataset = concateTargetWithDataset(irisData.data, irisData.target)
+
+  naiveBayes = NaiveBayes.NaiveBayes()
+  crossValidator = CrossValidator.CrossValidator(algo=naiveBayes, dataset=newDataset, nbFolds=10)
+  _scoresByFold, meanAccuracy, rocData = crossValidator.score()
+  print('Accuracy: %.2f%%' % meanAccuracy)
+
+  roc = ROC.ROC()
+  roc.rocCurve(rocData)
+  roc.showROC()
 
 if __name__ == "__main__":
-    main()
+    mainWhitoutFirstFlower()
+    mainWhitoutMiddleFlower()
+    mainWhitoutLastFlower()

@@ -1,6 +1,4 @@
 scikit-learn
-numpy
-Counter
 pprint
 copy
 random
