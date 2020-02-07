@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import pprint
 
 class ROC:
   def __init__(self):

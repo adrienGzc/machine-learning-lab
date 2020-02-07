@@ -63,7 +63,18 @@ def mainWhitoutLastFlower():
   roc.rocCurve(rocData)
   roc.showROC()
 
+# Try with all flower, expect with the ROC as the ROC is for binary classification
+def mainWIthAllFlower():
+  irisData = datasets.load_iris()
+  newDataset = concateTargetWithDataset(irisData.data, irisData.target)
+
+  naiveBayes = NaiveBayes.NaiveBayes()
+  crossValidator = CrossValidator.CrossValidator(algo=naiveBayes, dataset=newDataset, nbFolds=10)
+  _scoresByFold, meanAccuracy, _rocData = crossValidator.score()
+  print('Accuracy: %.2f%%' % meanAccuracy)
+
 if __name__ == "__main__":
     mainWhitoutFirstFlower()
     mainWhitoutMiddleFlower()
     mainWhitoutLastFlower()
+    mainWIthAllFlower()
