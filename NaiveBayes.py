@@ -28,7 +28,7 @@ class NaiveBayes:
 
   # Return the standard deviation from a list.
   def __standardDeviation(self, feature):
-    return round(math.sqrt(self.__variance(feature)), 2)
+    return math.sqrt(self.__variance(feature))
 
 
   # Divide data by class.

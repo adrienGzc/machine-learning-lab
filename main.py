@@ -73,8 +73,22 @@ def mainWIthAllFlower():
   _scoresByFold, meanAccuracy, _rocData = crossValidator.score()
   print('Accuracy: %.2f%%' % meanAccuracy)
 
+def mainTestBrainCancer():
+  irisData = datasets.load_breast_cancer()
+  newDataset = concateTargetWithDataset(irisData.data, irisData.target)
+
+  naiveBayes = NaiveBayes.NaiveBayes()
+  crossValidator = CrossValidator.CrossValidator(algo=naiveBayes, dataset=newDataset, nbFolds=10)
+  _scoresByFold, meanAccuracy, rocData = crossValidator.score()
+  print('Accuracy: %.2f%%' % meanAccuracy)
+
+  roc = ROC.ROC()
+  roc.rocCurve(rocData)
+  roc.showROC()
+
 if __name__ == "__main__":
-    mainWhitoutFirstFlower()
-    mainWhitoutMiddleFlower()
+    # mainWhitoutFirstFlower()
+    # mainWhitoutMiddleFlower()
     mainWhitoutLastFlower()
-    mainWIthAllFlower()
+    # mainWIthAllFlower()
+    # mainTestBrainCancer()

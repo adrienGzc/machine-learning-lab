@@ -32,6 +32,11 @@ class ROC:
       self.tpr.append(tp / (tp + fn))
       # Same as TPR but for FPR.
       self.fpr.append(fp / (fn + tp))
+    self.tpr.sort()
+    self.tpr.insert(0, 0.0)
+    self.fpr.sort()
+    self.fpr.insert(0, 0.0)
+    print(self.tpr)
 
   # Display the ROC Curve with matplot.    
   def showROC(self):
