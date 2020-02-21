@@ -87,8 +87,8 @@ def mainTestBrainCancer():
   roc.showROC()
 
 if __name__ == "__main__":
-    # mainWhitoutFirstFlower()
-    # mainWhitoutMiddleFlower()
+    mainWhitoutFirstFlower()
+    mainWhitoutMiddleFlower()
     mainWhitoutLastFlower()
-    # mainWIthAllFlower()
-    # mainTestBrainCancer()
+    mainWIthAllFlower()
+    mainTestBrainCancer()
